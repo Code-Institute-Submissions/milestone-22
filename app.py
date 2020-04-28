@@ -20,7 +20,14 @@ def get_patients():
 
 @app.route('/add_patient')
 def add_patient():
-    return render_template('add_patient.html',               doctors=mongo.db.doctors.find())
+    return render_template('add_patient.html', doctors=mongo.db.doctors.find())
+
+
+@app.route('/insert_patient', methods=['POST'])
+def insert_patient():
+    patients =  mongo.db.patients
+    patients.insert_one(request.form.to_dict())
+    return redirect(url_for('get_patients'))
 
 
 @app.route('/get_doctors')
