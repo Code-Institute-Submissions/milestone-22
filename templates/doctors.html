@@ -3,8 +3,11 @@
         {% for doctor in doctors %}
             <div class="row text-center justify-content-center mb-4 pt-4 pb-4">
                 <div class="col-4 col-md-3">
-                    <i class="fas fa-user-edit ml-1"></i>
-                    <i class="fas fa-user-minus"></i>
+                    <button class="btn btn-danger">
+                <a class="text-white" href="{{ url_for('delete_doctor', doctor_id=doctor._id) }}">
+                    <i class="fas fa-user-minus mr-3"></i>Delete
+                </a>
+            </button>
                 </div>
                 <div class="col-8 col-md-3">
                         <div >Dr. {{doctor.name}}</div>

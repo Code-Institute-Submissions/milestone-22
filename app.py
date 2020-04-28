@@ -25,8 +25,39 @@ def add_patient():
 
 @app.route('/insert_patient', methods=['POST'])
 def insert_patient():
-    patients =  mongo.db.patients
+    patients = mongo.db.patients
     patients.insert_one(request.form.to_dict())
+    return redirect(url_for('get_patients'))
+
+
+@app.route('/edit_patient/<patient_id>')
+def edit_patient(patient_id):
+    the_patient = mongo.db.patients.find_one({"_id": ObjectId(patient_id)})
+    all_doctors = mongo.db.doctors.find()
+    return render_template('edit_patient.html', patient=the_patient, doctors=all_doctors)
+
+
+@app.route('/update_patient/<patient_id>', methods=["POST"])
+def update_patient(patient_id):
+    patients = mongo.db.patients
+    patients.update({'_id': ObjectId(patient_id)},
+    {
+        'first_name': request.form.get('first_name'),
+        'last_name': request.form.get('last_name'),
+        'card_num': request.form.get('card_num'),
+        'phone': request.form.get('phone'),
+        'email': request.form.get('email'),
+        'address': request.form.get('address'),
+        'city': request.form.get('city'),
+        'postal_code': request.form.get('postal_code'),
+        'doctor': request.form.get('doctor')
+    })
+    return redirect(url_for('get_patients'))
+
+
+@app.route('/delete_patient/<patient_id>')
+def delete_patient(patient_id):
+    mongo.db.patients.remove({'_id': ObjectId(patient_id)})
     return redirect(url_for('get_patients'))
 
 
@@ -37,8 +68,14 @@ def get_doctors():
 
 @app.route('/insert_doctor', methods=['POST'])
 def insert_doctor():
-    doctors =  mongo.db.doctors
+    doctors = mongo.db.doctors
     doctors.insert_one(request.form.to_dict())
+    return redirect(url_for('get_doctors'))
+
+
+@app.route('/delete_doctor/<doctor_id>')
+def delete_doctor(doctor_id):
+    mongo.db.doctors.remove({'_id': ObjectId(doctor_id)})
     return redirect(url_for('get_doctors'))
 
 
