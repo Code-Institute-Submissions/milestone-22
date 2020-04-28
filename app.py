@@ -35,9 +35,11 @@ def get_doctors():
     return render_template('doctors.html', doctors=mongo.db.doctors.find())
 
 
-@app.route('/add_doctor')
-def add_doctor():
-    return render_template('add_doctor.html')
+@app.route('/insert_doctor', methods=['POST'])
+def insert_doctor():
+    doctors =  mongo.db.doctors
+    doctors.insert_one(request.form.to_dict())
+    return redirect(url_for('get_doctors'))
 
 
 if __name__ == '__main__':

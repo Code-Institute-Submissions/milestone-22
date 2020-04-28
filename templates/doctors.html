@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+        {% for doctor in doctors %}
+            <div class="row text-center justify-content-center mb-4 pt-4 pb-4">
+                <div class="col-4 col-md-3">
+                    <i class="fas fa-user-edit ml-1"></i>
+                    <i class="fas fa-user-minus"></i>
+                </div>
+                <div class="col-8 col-md-3">
+                        <div >Dr. {{doctor.name}}</div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <form action="{{ url_for('insert_doctor') }}" method="POST">
+            <div class="col text-center">
+                Dr. <input type="text" name="name" id="name">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus mr-2 -t"></i>Add Doctor</button>
+            </div>
+        </form>
+{% endblock %}
