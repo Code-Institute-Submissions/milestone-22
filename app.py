@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = 'mcqueen_clinic'
-app.config["MONGO_URI"] = 'mongodb+srv://sean:letmeenter@codeinstitute-0x7de.mongodb.net/mcqueen_clinic?retryWrites=true&w=majority'
+app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 mongo = PyMongo(app)
 
@@ -16,6 +16,17 @@ mongo = PyMongo(app)
 @app.route('/get_patients')
 def get_patients():
     return render_template('patients.html', patients=mongo.db.patients.find())
+
+
+@app.route('/search_patient', methods=['POST'])
+def search_patient():
+    search_type = request.form.get("search_type")
+    print(search_type)
+    search_query = request.form.get("search_query")
+    print(search_query)
+    search_results = mongo.db.patients.find({search_type: search_query})
+    print(search_results)
+    return render_template('patients.html', patients=search_results)
 
 
 @app.route('/add_patient')
